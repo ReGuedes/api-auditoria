@@ -4,7 +4,7 @@ from auditoria import auditar_notas
 import banco # Importando o nosso novo módulo!
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, resources={r"/api/*": {"origins": "*"}})
 
 # Garante que a tabela seja criada assim que o servidor ligar
 banco.criar_tabela()
