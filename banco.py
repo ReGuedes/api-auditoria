@@ -1,17 +1,19 @@
 import sqlite3
+import os
 
-# 1. Função para abrir a conexão com o arquivo do banco
+# Usaremos a pasta /tmp que é onde o Render permite escrita
+CAMINHO_BANCO = "/tmp/notas_fiscais.db"
+
 def conectar_banco():
-    conexao = sqlite3.connect("notas_fiscais.db")
-    conexao.row_factory = sqlite3.Row # Retorna os dados em um formato de dicionário fácil de ler
+    # Se estivermos rodando no Render, usa /tmp, senão usa local
+    caminho = "/tmp/notas_fiscais.db" if os.path.exists("/tmp") else "notas_fiscais.db"
+    conexao = sqlite3.connect(caminho)
+    conexao.row_factory = sqlite3.Row
     return conexao
 
-# 2. Função para criar a nossa tabela na primeira vez que rodarmos
 def criar_tabela():
     conexao = conectar_banco()
     cursor = conexao.cursor()
-    
-    # O comando SQL para criar a "planilha" do banco de dados
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS notas (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
